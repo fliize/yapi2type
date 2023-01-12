@@ -5,13 +5,9 @@ import { getTypeDefine } from "./core/yapiToTs";
 const Popup = () => {
 
   const [response, setResponse] = useState<string>('{}')
+  const [reqBody, setReqBody] = useState<string>('{}')
 
   useEffect(() => {
-    // chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    //   setCurrentURL(tabs[0].url);
-    // });
-    console.log('???????????????');
-    
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const tab = tabs[0];
       if (tab.id) {
@@ -23,26 +19,22 @@ const Popup = () => {
           (msg) => {
             // setResponse(msg)
             const data = JSON.parse(msg).data
-            const resBody = JSON.parse(data.res_body)
+            const resBody = JSON.parse(data.res_body || '{}')
+            const reqBody = JSON.parse(data.req_body_other || '{}')
             console.log(typeof resBody, resBody);
-            
-            const res = getTypeDefine(resBody)
-            console.log('msg', msg);
-            console.log('res', res);
-            
-            setResponse(res)
+            setResponse(getTypeDefine(resBody, 'response'))
+            setReqBody(getTypeDefine(reqBody, 'req'))
           }
         );
       }
     });
   }, []);
 
-  const changeBackground = () => {
-    
-  };
-
   return (
     <>
+      <div style={{ whiteSpace: 'pre' }}>
+        {reqBody}
+      </div>
       <div style={{ whiteSpace: 'pre' }}>
         {response}
       </div>

@@ -12,7 +12,7 @@ const isEnumLike = (data: IIntegerProperty): data is Required<IIntegerProperty> 
     return data.description.replace(reg, '').split(/\d+/).length > 1
 }
 
-export const getTypeDefine = (data: IObjectProperty): string => {
+export const getTypeDefine = (data: IObjectProperty, spaceName: string): string => {
 
     function getBoolDesc(data: IBoolProperty, name: string): string {
         // 返回boolean类型的声明
@@ -58,7 +58,7 @@ export const getTypeDefine = (data: IObjectProperty): string => {
 
     function getObjectDesc(data: IObjectProperty, name: string): string {
         // 根据对象生成IName类型
-        resStr = genInterface(data, name) + resStr
+        resStr = genInterface(data, name || spaceName) + resStr
         if (!name) return ''
         // 返回object类型的声明
         return `// ${data.description}
@@ -81,7 +81,7 @@ export const getTypeDefine = (data: IObjectProperty): string => {
     }
 
     // 生成interface
-    function genInterface(data: IObjectProperty, name: string = 'response'): string {
+    function genInterface(data: IObjectProperty, name: string): string {
         let str = `interface ${'I' + capitalized(name)} `
         str += '{\n'
         for (const [key, value] of Object.entries(data.properties)) {
@@ -111,6 +111,5 @@ export const getTypeDefine = (data: IObjectProperty): string => {
     let resStr = ''
     const res = getTypeDesc(data)
     resStr += res
-    // console.log('resStr', resStr)
     return resStr
 }
