@@ -1,50 +1,51 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { getTypeDefine } from "./core/yapiToTs";
 
 const Popup = () => {
-  const [count, setCount] = useState(0);
-  const [currentURL, setCurrentURL] = useState<string>();
+
+  const [response, setResponse] = useState<string>('{}')
 
   useEffect(() => {
-    chrome.action.setBadgeText({ text: count.toString() });
-  }, [count]);
-
-  useEffect(() => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      setCurrentURL(tabs[0].url);
-    });
-  }, []);
-
-  const changeBackground = () => {
+    // chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    //   setCurrentURL(tabs[0].url);
+    // });
+    console.log('???????????????');
+    
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const tab = tabs[0];
       if (tab.id) {
         chrome.tabs.sendMessage(
           tab.id,
           {
-            color: "#555555",
+            type: "getResponse",
           },
           (msg) => {
-            console.log("result message:", msg);
+            // setResponse(msg)
+            const data = JSON.parse(msg).data
+            const resBody = JSON.parse(data.res_body)
+            console.log(typeof resBody, resBody);
+            
+            const res = getTypeDefine(resBody)
+            console.log('msg', msg);
+            console.log('res', res);
+            
+            setResponse(res)
           }
         );
       }
     });
+  }, []);
+
+  const changeBackground = () => {
+    
   };
 
   return (
     <>
-      <ul style={{ minWidth: "700px" }}>
-        <li>Current URL: {currentURL}</li>
-        <li>Current Time: {new Date().toLocaleTimeString()}</li>
-      </ul>
-      <button
-        onClick={() => setCount(count + 1)}
-        style={{ marginRight: "5px" }}
-      >
-        count up
-      </button>
-      <button onClick={changeBackground}>change background</button>
+      <div style={{ whiteSpace: 'pre' }}>
+        {response}
+      </div>
     </>
   );
 };
