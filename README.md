@@ -1,16 +1,11 @@
-# Chrome Extension TypeScript Starter
+# yapi to type chrome extension
 
-![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg)
 
-Chrome Extension, TypeScript and Visual Studio Code
+generate type for yapi docs
 
 ## Prerequisites
 
 * [node + npm](https://nodejs.org/) (Current Version)
-
-## Option
-
-* [Visual Studio Code](https://code.visualstudio.com/)
 
 ## Includes the following
 
@@ -18,12 +13,6 @@ Chrome Extension, TypeScript and Visual Studio Code
 * Webpack
 * React
 * Jest
-* Example Code
-    * Chrome Storage
-    * Options Version 2
-    * content script
-    * count up badge number
-    * background
 
 ## Project Structure
 
