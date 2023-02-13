@@ -70,7 +70,7 @@ export const getTypeDefine = (data: IObjectProperty, spaceName: string): string 
         const cleanStr = data.description.replace(reg, '')
         const enumValues = cleanStr.match(/\d+/g) as unknown as number[]
         const enumTextList = cleanStr.split(/\d+/).slice(-enumValues.length)
-        let str = `enum ${capitalized(name) + 'Enum'} `
+        let str = `export enum ${capitalized(name) + 'Enum'} `
         str += '{\n'
         for (let i = 0; i < enumValues.length; i++) {
             str += `${enumTextList[i]} = ${enumValues[i]},`
@@ -82,7 +82,7 @@ export const getTypeDefine = (data: IObjectProperty, spaceName: string): string 
 
     // 生成interface
     function genInterface(data: IObjectProperty, name: string): string {
-        let str = `interface ${'I' + capitalized(name)} `
+        let str = `export interface ${'I' + capitalized(name)} `
         str += '{\n'
         for (const [key, value] of Object.entries(data.properties)) {
             str += getTypeDesc(value, key)
